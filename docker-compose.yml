@@ -1,0 +1,48 @@
+---
+version: '2'
+
+services:
+  rest:
+    #Uncomment line below if you want to build from Github source code
+    #Otherwise it will pull pre-built images from Docker Hub
+    #build: ./rest
+    container_name: rest
+    image: appdynamics/sample-app-rest
+    environment:
+      - CONTROLLER_URL=707.saas.appdynamics.com
+      - CONTROLLER_PORT=443
+      - CONTROLLER_ACCOUNT_NAME=707
+      - CONTROLLER_ACCESS_KEY=4ecnfsmkemg4
+      - PORTAL_USERNAME=yshyxr@gmail.com
+      - PORTAL_PASSWORD=
+      - AGENT_VERSION=4.2.11.0
+    links:
+      - db
+    ports: 
+      - "8080:8080"
+
+  db:
+    container_name: db
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secretquery  
+    ports: 
+      - "3306:3306"
+
+  web:
+    #Uncomment line below if you want to build from Github source code
+    #Otherwise it will pull pre-built images from Docker Hub
+    #build: ./web
+    container_name: web
+    image: appdynamics/sample-app-web
+    environment:
+      - CONTROLLER_URL=707.saas.appdynamics.com
+      - CONTROLLER_PORT=443
+      - CONTROLLER_ACCOUNT_NAME=707
+      - CONTROLLER_ACCESS_KEY=4ecnfsmkemg4
+      - APP_ID=29261
+    links:
+      - rest
+      - db
+    ports:
+      - "3000:3000"
